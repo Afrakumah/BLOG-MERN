@@ -26,7 +26,7 @@ export default function Signup() {
       //set error to null bcos maybe there's error for the pre use req and it must be cleared
       setErrorMessage(null);
 
-      //because it's frontend we can add localhost tothe path instead create a proxy in vite.config file
+      //because it's frontend we can add localhost tothe path but instead create a proxy in vite.config file
       const res = await fetch("/api/auth/sign-up", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -72,7 +72,7 @@ export default function Signup() {
         <div className="flex-1">
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <div>
-              <Label value="Your Username" />
+              <Label value="Username" />
               <TextInput
                 onChange={handleChange}
                 type="text"
@@ -81,7 +81,7 @@ export default function Signup() {
               />
             </div>
             <div>
-              <Label value="Your Email" />
+              <Label value="Email" />
               <TextInput
                 onChange={handleChange}
                 type="email"
@@ -90,7 +90,7 @@ export default function Signup() {
               />
             </div>
             <div>
-              <Label value="Your Password" />
+              <Label value="Password" />
               <TextInput
                 onChange={handleChange}
                 type="password"
