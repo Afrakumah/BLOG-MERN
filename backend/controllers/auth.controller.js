@@ -35,6 +35,7 @@ export const signup = asyncHandler(async (req, res, next) => {
   next(error);
 });
 
+
 //signin function
 export const signin = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
@@ -77,3 +78,43 @@ export const signin = asyncHandler(async (req, res, next) => {
   
   next(error);
 });
+
+
+//signin with google
+export const google = asyncHandler(async(req, res, next) => {
+  //receiving resultsfromgoogle body from frontend, oauth.js
+  const {email, name, googlPhotoUrl} = req.body
+
+  //checking if a user exists and create token
+  const user = await User.findOne({email})
+  if(user) {
+    const token = jwt.sign({id: user._id}, process.env.JWT_SECRET);
+    
+    //remove password from the rest of the data
+    const {password, ...rest} = user._doc;
+    res.status(200).cookie('access_token', token, {
+      httpOnly: true
+    }).json(rest);
+
+
+    //if user does not exist
+  } else {
+    const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+    const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
+
+    const newUser = new User({
+      //Angelina Opoku => angelinaopoku11298
+      username: name.toLowerCase().split(' ').join('') + Math.random().toString(9).slice(-4),
+      email,
+      password: hashedPassword,
+      profilePicture: googlPhotoUrl
+
+    });
+    await newUser.save()
+    const token = jwt.sign({id: newUser._id}, process.env.JWT_SECRET);
+    const {password, ...rest} = newUser._doc;
+    res.status(200).cookie('access_token', token, {
+      httpOnly: true
+    }).json(rest);
+  }
+})
