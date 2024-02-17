@@ -3,11 +3,14 @@ import userReducer from "./user/userSlice.js";
 import {persistReducer} from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import {persistStore} from "redux-persist";
+import themeReducer from './theme/themeSlice.js'
+
 
 //redux persist is used so as to not lose user data when the browser refreshes
 
 const rootReducer = combineReducers({
   user: userReducer,
+  theme: themeReducer
 });
 
 const persistConfig = {
